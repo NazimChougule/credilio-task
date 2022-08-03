@@ -7,35 +7,46 @@ export default class AuthController {
     // Register User
     public async register({ request, response }: HttpContextContract) {
 
-        // Validate email 
-        const validations = await schema.create({
+        // Schema for request body validation
+        const registerUserSchema = await schema.create({
             email: schema.string({}, [
                 rules.email(),
+                rules.trim(),
                 rules.unique({ table: 'users', column: 'email' })
             ]),
             password: schema.string({}),
         })
 
         // Validate request using the schema
-        const data = await request.validate({ schema: validations })
+        const data = await request.validate({ schema: registerUserSchema })
 
         // Create user once the request body is validated
         const user = await User.create(data)
 
-        // Set Response Header
-        response.status(201)
-
         // Send Response to client
-        return response.created(user)
+        response.status(201)
+        return user
 
     }
 
     // Login User
-    public async login({ request, response, auth }: HttpContextContract) {
+    public async login({ request, auth }: HttpContextContract) {
+
+        // Schema for request body validation
+        const loginUserSchema = await schema.create({
+            email: schema.string({}, [
+                rules.email(),
+                rules.trim(),
+            ]),
+            password: schema.string({}),
+        })
+
+        // Validate request using the schema
+        const data = await request.validate({ schema: loginUserSchema })
 
         // Fetch user credentials from request 
-        const password = await request.input('password')
-        const email = await request.input('email')
+        const password = data.password
+        const email = data.email
 
         try {
             // Create Token based on the user credentials
@@ -44,29 +55,23 @@ export default class AuthController {
             });
 
             // Return token that is generated
-            return response
-                .status(400)
-                .send({ message: 'Logged in successfullly', token: token.toJSON() })
+            return { message: 'Logged in successfullly', token: token.toJSON() }
 
         } catch {
 
             // Send error if the user credentials are invalid
-            return response
-                .status(400)
-                .send({ error: { message: 'User with provided credentials could not be found' } })
+            return { error: { message: 'User with provided credentials could not be found' } };
         }
     }
 
     // Logout User
-    public async logout({ auth, response }: HttpContextContract) {
+    public async logout({ auth }: HttpContextContract) {
 
         // Logout user
         await auth.logout()
 
         // Send response to user
-        return response
-            .status(200)
-            .send({ message: 'Logged out successfully' })
+        return { message: 'Logged out successfully' };
 
     }
 

@@ -5,4 +5,6 @@ Route.group(() => {
     Route.post('', 'ProfilesController.create') // Create User
     Route.put('', 'ProfilesController.update') // Update User
     Route.delete('', 'ProfilesController.delete') // Delete User
-}).prefix('user/profile/')
+})
+    .middleware('auth')
+    .prefix('api/user/profile/')

@@ -6,19 +6,19 @@ export default class Profile extends BaseModel {
   public id: number
 
   @column()
-  public user_id: number
+  public userId: number
 
   @column()
   public name: string
 
   @column()
-  public mobile: number
+  public mobile: string
 
   @column()
   public gender: string
 
-  @column()
-  public dob: Date
+  @column.date({ autoCreate: false, autoUpdate: false })
+  public dob: DateTime
 
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime

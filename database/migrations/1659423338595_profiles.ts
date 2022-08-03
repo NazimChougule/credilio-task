@@ -15,9 +15,9 @@ export default class extends BaseSchema {
         .onDelete('CASCADE') // delete profile when user is deleted
 
       table.string('name', 30).notNullable()
-      table.integer('mobile').notNullable()
+      table.string('mobile', 10).notNullable()
       table.string('gender').notNullable()
-      table.date('dob').notNullable()
+      table.string('dob').notNullable()
 
       /**
        * Uses timestamptz for PostgreSQL and DATETIME2 for MSSQL
