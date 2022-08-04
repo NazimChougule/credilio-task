@@ -14,7 +14,7 @@ export default class AuthController {
                 rules.trim(),
                 rules.unique({ table: 'users', column: 'email' })
             ]),
-            password: schema.string({}),
+            password: schema.string({ trim: true }),
         })
 
         // Validate request using the schema
@@ -38,7 +38,7 @@ export default class AuthController {
                 rules.email(),
                 rules.trim(),
             ]),
-            password: schema.string({}),
+            password: schema.string({ trim: true }),
         })
 
         // Validate request using the schema
