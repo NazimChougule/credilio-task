@@ -70,7 +70,7 @@ export default class ProfilesController {
         /**
          * Refreshing the `profile` model before returning it as the payload of the response is important.
          * If not refreshed, only the actual/few properties which were inserted will be returned
-         */
+        */
         await profile.refresh()
 
         // Send newly created profile to client
